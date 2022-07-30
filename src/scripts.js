@@ -116,124 +116,17 @@ function findExistingPantryIngredients() {
 
 function addIngredientsToPantry() {
   //const newIngredient = {};
-  console.log(user.pantry.getNeededIngredients({
-    "id": 595736,
-    "image": "https://spoonacular.com/recipeImages/595736-556x370.jpg",
-    "ingredients": [
-      {
-        "id": 20081,
-        "quantity": {
-          "amount": 1.5,
-          "unit": "c"
-        }
-      },
-      {
-        "id": 18372,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "tsp"
-        }
-      },
-      {
-        "id": 1123,
-        "quantity": {
-          "amount": 1,
-          "unit": "large"
-        }
-      },
-      {
-        "id": 19335,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "c"
-        }
-      },
-      {
-        "id": 19206,
-        "quantity": {
-          "amount": 3,
-          "unit": "Tbsp"
-        }
-      },
-      {
-        "id": 19334,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "c"
-        }
-      },
-      {
-        "id": 2047,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "tsp"
-        }
-      },
-      {
-        "id": 1012047,
-        "quantity": {
-          "amount": 24,
-          "unit": "servings"
-        }
-      },
-      {
-        "id": 10019903,
-        "quantity": {
-          "amount": 2,
-          "unit": "c"
-        }
-      },
-      {
-        "id": 1145,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "c"
-        }
-      },
-      {
-        "id": 2050,
-        "quantity": {
-          "amount": 0.5,
-          "unit": "tsp"
-        }
-      }
-    ],
-    "instructions": [
-      {
-        "instruction": "In a large mixing bowl, whisk together the dry ingredients (flour, pudding mix, soda and salt). Set aside.In a large mixing bowl of a stand mixer, cream butter for 30 seconds. Gradually add granulated sugar and brown sugar and cream until light and fluffy.",
-        "number": 1
-      },
-      {
-        "instruction": "Add egg and vanilla and mix until combined.",
-        "number": 2
-      },
-      {
-        "instruction": "Add dry ingredients and mix on low just until incorporated. Stir in chocolate chips.Scoop the dough into 1,5 tablespoon size balls and place on a plate or sheet. Cover with saran wrap and chill at least 2 hours or overnight.When ready to bake, preheat oven to 350 degrees.",
-        "number": 3
-      },
-      {
-        "instruction": "Place the cookie dough balls into ungreased muffin pan. Sprinkle with sea salt.",
-        "number": 4
-      },
-      {
-        "instruction": "Bake for 9 to 10 minutes, or until you see the edges start to brown.",
-        "number": 5
-      },
-      {
-        "instruction": "Remove the pan from the oven and let sit for 10 minutes before removing onto a cooling rack.Top with ice cream and a drizzle of chocolate sauce.",
-        "number": 6
-      }
-    ],
-    "name": "Loaded Chocolate Chip Pudding Cookie Cups",
-    "tags": [
-      "antipasti",
-      "starter",
-      "snack",
-      "appetizer",
-      "antipasto",
-      "hor d'oeuvre"
-    ]
-  }))
+  // Use the event to get the data attribute off of the addToPantry button and store it in a variable
+  //const selectedRecipe = recipeRepository.recipeList.find(recipe => recipe.id === recipeId);
+  const postObj = makePostObj();
+  // Now you should have a recipe to pass into getNeededIngredients()
+  //console.log the recipe and think about how you will access the data you need
+
+
+  // Call the makePostObj first and store it in a variable
+  // Pass that variable into the method that makes the post request (addToPantry())
+  console.log(user.pantry.getNeededIngredients());
+
 };
 
 //Iterate over the user class and set the function parameters as keys in a new object
@@ -253,7 +146,7 @@ function recipeDisplayHandler(event) {
     } else if (parseInt(event.target.getAttribute('data-favoriteRecipe')) && event.target.innerHTML === 'Remove') {
         removeFromFavorite(event);
         showFavorites();
-    }
+    } //Add else if statement that checks if the addToPantry buttons has the data attribute that I assigned to it.
 }
 
 function removeFromFavorite(event) {
@@ -284,7 +177,7 @@ function showIngredientsNeeded(selectedRecipe) {
                         if (pantryIngredient.id === ingredient.id) {
 
                             pantryIngredient.name = ingredient.name;
-                      
+
                         }
                     })
                 return pantryIngredient;
@@ -293,7 +186,7 @@ function showIngredientsNeeded(selectedRecipe) {
                                                                         <ul id="neededIngredients"></ul>`
 
             neededIngredients.forEach((neededIngredient) => {
-                document.querySelector("#neededIngredients").innerHTML +=  
+                document.querySelector("#neededIngredients").innerHTML +=
                     `<li>${neededIngredient.name}, ${neededIngredient.quantity.amount} ${neededIngredient.quantity.unit}</li>`
             })
         }
@@ -393,7 +286,10 @@ function showRecipeInstructions(event) {
 
     if (user.recipesToCook.includes(selectedRecipe)) {
         showIngredientsNeeded(selectedRecipe);
+          //Add Pantry button here with a data attribute that has ${selectedRecipe.id} as value.
+          //
     }
+
 
     selectedRecipe.instructions.forEach((instruction) => {
         document.querySelector("#recipeInstructions").innerHTML += (`
