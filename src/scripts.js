@@ -47,10 +47,7 @@ fetchData().then(responses => {
 
 }).catch(err => recipeDisplay.innerHTML = (`<h1>${err}</h1>`));
 
-//addToPantry();
 
-// Create a function to fire an event listener once it is clicked.
-// The function should iterate over userInfo and get the userID and get the ingredientInfo.id
 
 recipeDisplay.addEventListener('click', recipeDisplayHandler);
 homeButton.addEventListener('click', goHome);
@@ -58,7 +55,6 @@ filterForm.addEventListener('submit', filterRecipeTag);
 searchForm.addEventListener('submit', searchRecipeName);
 favoriteButton.addEventListener('click', showFavorites);
 //cookRecipeButton.addEventListener('click', canCookRecipe);
-addToPantryButton.addEventListener('click', addIngredientsToPantry);
 pantryButton.addEventListener('click', showMyPantry);
 filterFavoriteForm.addEventListener('submit', filterFavoriteRecipesByTag);
 favSearchForm.addEventListener('submit', searchFavRecipeListByName);
@@ -114,20 +110,37 @@ function findExistingPantryIngredients() {
     return pantryIngredients;
 }
 
-function addIngredientsToPantry() {
+function addIngredientsToPantry(event) {
   //const newIngredient = {};
+  const recipeId = parseInt(event.target.getAttribute('data-pantryIngredient'))
+  const userId = user.id
+  console.log(event.target.getAttribute('data-pantryIngredient'), "1")
+  console.log(recipeId, "2")
   // Use the event to get the data attribute off of the addToPantry button and store it in a variable
-  //const selectedRecipe = recipeRepository.recipeList.find(recipe => recipe.id === recipeId);
-  const postObj = makePostObj();
+  const selectedRecipe = recipeRepository.recipeList.find(recipe => recipe.id === recipeId);
+  const pantryIngredients = user.pantry.getNeededIngredients(selectedRecipe)
+  // we need to iterate thru pantryIngredients and find the id and the amount
+  const pantry = pantryIngredients.map((ingredient) => {
+    return {ingredientID: ingredient.id, ingredientAmount: ingredient.quantity.amount}
+})
+console.log(pantry)
+
+    const postObj = pantry.map(ingredientIdAndAmount => {
+        return makePostObj(userId, ingredientIdAndAmount.id, ingredientIdAndAmount.ingredientAmount)
+    });
+
+}
+
+
   // Now you should have a recipe to pass into getNeededIngredients()
   //console.log the recipe and think about how you will access the data you need
 
 
   // Call the makePostObj first and store it in a variable
   // Pass that variable into the method that makes the post request (addToPantry())
-  console.log(user.pantry.getNeededIngredients());
+//   console.log(user.pantry.getNeededIngredients());
 
-};
+// };
 
 //Iterate over the user class and set the function parameters as keys in a new object
 function makePostObj(userID, ingredientID, ingredientMod) {
@@ -146,7 +159,10 @@ function recipeDisplayHandler(event) {
     } else if (parseInt(event.target.getAttribute('data-favoriteRecipe')) && event.target.innerHTML === 'Remove') {
         removeFromFavorite(event);
         showFavorites();
-    } //Add else if statement that checks if the addToPantry buttons has the data attribute that I assigned to it.
+    } else if (event.target.getAttribute("data-pantryIngredient")) {
+        addIngredientsToPantry(event);
+        //Add else if statement that checks if the addToPantry buttons has the data attribute that I assigned to it.
+    }
 }
 
 function removeFromFavorite(event) {
@@ -155,6 +171,7 @@ function removeFromFavorite(event) {
 }
 
 function addToFavorite(event) {
+    event.target.classList.add('hidden');
     const recipeId = parseInt(event.target.getAttribute('data-favoriteRecipe'))
     const selectedRecipe = recipeRepository.recipeList.find(recipe => recipe.id === recipeId);
     user.addRecipesToCook(selectedRecipe);
@@ -162,7 +179,6 @@ function addToFavorite(event) {
     if (event.target.getAttribute("data-instructionDisplay")) {
         showIngredientsNeeded(selectedRecipe);
     }
-    event.target.classList.add('hidden');
 }
 
 function showIngredientsNeeded(selectedRecipe) {
@@ -182,6 +198,7 @@ function showIngredientsNeeded(selectedRecipe) {
                     })
                 return pantryIngredient;
             })
+                document.getElementById(selectedRecipe.id).innerHTML += `<button class="favorite-button" data-pantryIngredient=${selectedRecipe.id}>Add to Pantry</button>`
             document.querySelector("#pantryFeedback").innerHTML += `<p class="ingredients-feedback"> You don't have enough ingredients! This is what you need. Read below:</p>
                                                                         <ul id="neededIngredients"></ul>`
 
