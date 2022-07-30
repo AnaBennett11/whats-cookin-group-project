@@ -128,8 +128,11 @@ const postObj = pantry.map(ingredientIdAndAmount => {
     return makePostObj(userId, ingredientIdAndAmount.ingredientId, ingredientIdAndAmount.ingredientAmount)
 });
 console.log(postObj)
+console.log(user.pantry, "before")
 postObj.forEach(obj => addToPantry(obj))
-// document.querySelector()
+console.log(user.pantry, "after")
+document.querySelector("#addToPantry").classList.add("hidden")
+
 }
 
 
@@ -199,7 +202,7 @@ function showIngredientsNeeded(selectedRecipe) {
                     })
                 return pantryIngredient;
             })
-                document.getElementById(selectedRecipe.id).innerHTML += `<button class="favorite-button" data-pantryIngredient=${selectedRecipe.id}>Add to Pantry</button>`
+                document.getElementById(selectedRecipe.id).innerHTML += `<button class="favorite-button" id="addToPantry" data-pantryIngredient=${selectedRecipe.id}>Add to Pantry</button>`
             document.querySelector("#pantryFeedback").innerHTML += `<p class="ingredients-feedback"> You don't have enough ingredients! This is what you need. Read below:</p>
                                                                         <ul id="neededIngredients"></ul>`
 
