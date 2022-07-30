@@ -114,21 +114,22 @@ function addIngredientsToPantry(event) {
   //const newIngredient = {};
   const recipeId = parseInt(event.target.getAttribute('data-pantryIngredient'))
   const userId = user.id
-  console.log(event.target.getAttribute('data-pantryIngredient'), "1")
-  console.log(recipeId, "2")
+//   console.log(event.target.getAttribute('data-pantryIngredient'), "1")
+//   console.log(recipeId, "2")
   // Use the event to get the data attribute off of the addToPantry button and store it in a variable
   const selectedRecipe = recipeRepository.recipeList.find(recipe => recipe.id === recipeId);
   const pantryIngredients = user.pantry.getNeededIngredients(selectedRecipe)
   // we need to iterate thru pantryIngredients and find the id and the amount
   const pantry = pantryIngredients.map((ingredient) => {
-    return {ingredientID: ingredient.id, ingredientAmount: ingredient.quantity.amount}
+    return {ingredientId: ingredient.id, ingredientAmount: ingredient.quantity.amount}
 })
-console.log(pantry)
-
-    const postObj = pantry.map(ingredientIdAndAmount => {
-        return makePostObj(userId, ingredientIdAndAmount.id, ingredientIdAndAmount.ingredientAmount)
-    });
-
+// console.log(pantry, "3")
+const postObj = pantry.map(ingredientIdAndAmount => {
+    return makePostObj(userId, ingredientIdAndAmount.ingredientId, ingredientIdAndAmount.ingredientAmount)
+});
+console.log(postObj)
+postObj.forEach(obj => addToPantry(obj))
+// document.querySelector()
 }
 
 
